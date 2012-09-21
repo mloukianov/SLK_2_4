@@ -1,0 +1,305 @@
+<!--
+  ~ Copyright (c) 2008-2011, Nine Line Labs LLC
+  ~
+  ~ The program contained herein may be used and/or copied only with
+  ~ the written permission of Nine Line Labs LLC or in accordance
+  ~ with terms and conditions stipulated in the agreement/contract
+  ~ under which the program(s) have been supplied.
+  ~
+  ~ $Id: $
+  ~
+  ~ Date Author Changes
+  ~ May 12, 2008 mloukianov Created
+  -->
+
+<project name="NLL-GameApplicationServer-UA" default="clean-dist" basedir=".">
+    <description>
+        Game Application Server build file
+    </description>
+
+	<!-- set global properties for this build -->
+	<property name="src"           location="src" />
+	<property name="test-src"      location="test" />
+	<property name="build"         location="build" />
+	<property name="dist"          location="dist" />
+	<property name="lib"           location="lib" />
+	<property name="conf"          location="conf" />
+
+	<property name="wsdl.dir"           location="wsdl" />
+	<property name="wsdl.generated.dir" location="wsdl-generated" />
+
+	<property name="checkstyle.dir" location="checkstyle-5.3" />
+
+	<property name="junit.dir" location="junit4" />
+
+	<property name="cobertura.dir" location="cobertura" />
+
+	<property name="coveragereport.dir"  location="coveragereport" />
+
+	<property name="instrumented.dir"  location="instrumented" />
+
+	<path id="classpath.path">
+		<pathelement location="${lib}/catalina.jar" />
+		<pathelement location="${lib}/commons-logging.jar" />
+		<pathelement location="${lib}/jgroups-all.jar" />
+		<pathelement location="${lib}/log4j.jar" />
+		<pathelement location="${lib}/commons-digester-1.7.jar" />
+		<pathelement location="${lib}/commons-beanutils-1.7.jar" />
+		<pathelement location="${lib}/commons-collections-2.1.jar" />
+		<pathelement location="${lib}/utils-nll.jar" />
+		<pathelement location="${lib}/mysql-connector-java-5.1.7-bin.jar" />
+
+		<pathelement location="${junit.dir}/junit-4.8.2.jar" />
+
+		<pathelement location="${build}" />
+	</path>
+
+	<path id="wsimport.classpath">
+		<fileset dir="jaxws-ri/lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="checkstyle.classpath">
+	    <fileset dir="${checkstyle.dir}/lib">
+	    	<include name="checkstyle-5.3-all.jar" />
+	    </fileset>
+	</path>
+
+	<path id="cobertura.classpath">
+	    <fileset dir="${cobertura.dir}">
+	        <include name="cobertura.jar" />
+	        <include name="lib/**/*.jar" />
+	    </fileset>
+	</path>
+
+	<!--taskdef classpathref="cobertura.classpath" resource="tasks.properties" / -->
+
+
+	<property file="local.properties" />
+
+	<taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+		<classpath refid="wsimport.classpath" />
+	</taskdef>
+
+	<taskdef resource="checkstyletask.properties" classpath="${checkstyle.dir}/checkstyle-5.3-all.jar"/>
+
+	<buildnumber file="buildnum/build.number" />
+	
+	<target name="clean-dist" depends="clean,dist"/>
+
+	<target name="integrate" depends="clean,svn-update,all,compile-src,compile-tests,integrate-database,run-tests,run-inspections,package,deploy">
+	</target>
+
+	<target name="svn-update">
+	</target>
+
+	<target name="clean" description="clean up">
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+		<delete dir="${coveragereport.dir}"/>
+		<delete dir="${instrumented.dir}"/>
+		<delete dir="${wsdl.generated.dir}" />
+		<delete file="cobertura.ser"/>
+		<touch file="${wsdl.dir}/drawingrequest_ws.wsdl" />
+	</target>
+
+	<target name="all">
+	</target>
+
+	<target name="compile-src">
+	</target>
+
+	<target name="compile-tests" depends="compile">
+		<javac srcdir="${test-src}" destdir="${build}" debug="true">
+			<classpath>
+				<path refid="classpath.path" />
+      </classpath>
+      <compilerarg value="-Xlint:unchecked" />
+  	</javac>
+  </target>
+
+  <target name="integrate-database">
+  </target>
+
+  <target name="run-tests" depends="compile-tests">
+
+  	<delete file="cobertura.ser" />
+
+  	<cobertura-instrument todir="${instrumented.dir}">
+  	    <ignore regex="org.apache.log4j.*" />
+  	    <fileset dir="${build}">
+  	        <include name="**/*.class" />
+  	        <exclude name="**/*Test.class" />
+  	    </fileset>
+  		<!--
+  	    <fileset dir="${guiclasses.dir}">
+  	        <include name="**/*.class" />
+  	        <exclude name="**/*Test.class" />
+  	    </fileset>
+  	    <fileset dir="${jars.dir}">
+  	        <include name="my-simple-plugin.jar" />
+  	    </fileset>
+  	    -->
+  	</cobertura-instrument>
+
+
+    <junit fork="yes" failureProperty="test.failed">
+
+    	<sysproperty key="net.sourceforge.cobertura.datafile"
+    		file="${basedir}/cobertura.ser" />
+
+        <classpath refid="classpath.path" />
+    	<classpath location="${instrumented.dir}" />
+
+    	<classpath refid="cobertura.classpath" />
+
+        <formatter type="brief" usefile="false" />
+
+        <batchtest>
+          <fileset dir="${build}" includes="**/*Test*.class" />
+        </batchtest>
+      </junit>
+
+		<cobertura-report format="html" destdir="${coveragereport.dir}" srcdir="${src}" />
+
+  </target>
+
+  <target name="run-inspections" depends="compile">
+  	<checkstyle config="${checkstyle.dir}/sun_checks.xml">
+  	  <fileset dir="src" includes="**/*.java"/>
+  	  <formatter type="plain"/>
+  	  <formatter type="xml" toFile="build/checkstyle_errors.xml"/>
+  	</checkstyle>
+  </target>
+
+  <target name="package">
+  </target>
+
+	<target name="deploy" depends="dist" description="deploy the files into Tomcat 6.x installation">
+
+		<copy file="${dist}/lib/SocketServer.jar" todir="${tomcat.home}/lib" overwrite="true" />
+		<copy file="${lib}/utils-nll.jar"         todir="${tomcat.home}/lib" overwrite="true" />
+		<copy file="${lib}/jgroups-all.jar"       todir="${tomcat.home}/lib" overwrite="true" />
+		<copy file="${lib}/commons-logging.jar"   todir="${tomcat.home}/lib" overwrite="true" />
+		<copy file="${lib}/log4j.jar"             todir="${tomcat.home}/lib" overwrite="true" />
+		<copy file="${conf}/server-config.xml"    todir="${tomcat.home}/lib" overwrite="true" />
+
+	</target>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  	<delete file="${conf}/server-config.xml" />
+  	<copy file="${conf}/server-config-sample.xml" tofile="${conf}/server-config.xml">
+  	  <filterset>
+  	    <filter token="VERSION" value="${version.number}" />
+  	  	<filter token="BUILDNO" value="${build.number}" />
+  	  </filterset>
+    </copy>
+  	<mkdir dir="${wsdl.generated.dir}" />
+  	<mkdir dir="${coveragereport.dir}"/>
+  	<mkdir dir="${instrumented.dir}"/>
+  </target>
+
+	<target name="generate-wsdl-stubs" depends="init">
+		<wsimport debug="true" keep="true"
+			destdir="${wsdl.generated.dir}"
+			wsdl="${wsdl.dir}/drawingrequest_ws.wsdl"
+			wsdlLocation="/wsdl/drawingrequest_ws.wsdl" >
+			<depends file="${wsdl.dir}/drawingrequest_ws.wsdl" />
+			<produces dir="${wsdl.generated.dir}/com/finstar/nsi/ws/drawingrequest" />
+		</wsimport>
+	</target>
+
+  <target name="compile" depends="init,generate-wsdl-stubs"
+        description="compile the source " >
+  	<!-- Compile generated java code from ${wsdl.generated.dir} into ${build} -->
+    <javac srcdir="${wsdl.generated.dir}" destdir="${build}" debug="true">
+      <classpath>
+        <path refid="classpath.path" />
+      </classpath>
+      <compilerarg value="-Xlint:unchecked" />
+  	</javac>
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}" debug="true">
+      <classpath>
+        <path refid="classpath.path" />
+      </classpath>
+      <compilerarg value="-Xlint:unchecked" />
+  	</javac>
+  	<copy file="${wsdl.dir}/drawingrequest_ws.wsdl" tofile="${build}/wsdl/drawingrequest_ws.wsdl" />
+  </target>
+
+  <target name="dist" depends="compile"
+        description="generate the distribution" >
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}/lib"/>
+
+    <!-- Put everything in ${build} into SocketServer.jar file -->
+    <jar jarfile="${dist}/lib/SocketServer.jar" basedir="${build}" >
+    	<manifest>
+    	    <attribute name="Main-Class" value="com.ninelinelabs.server.SocketServer" />
+    		<attribute name="Implementation-Version" value="${version.number}.${build.number}" />
+    	</manifest>
+     </jar>
+  	<echo>GameApplicationServer completed build ${build.number} on ${DSTAMP} at ${TSTAMP}</echo>
+  </target>
+
+  <target name="obfuscate" depends="dist">
+  	<taskdef resource="proguard/ant/task.properties"
+  	         classpath="${lib}/proguard.jar" />
+  	<proguard printseeds="on">
+  		<injar file="${dist}/lib/SocketServer.jar" />
+  		<outjar file="${dist}/lib/SocketServer_obfuscated.jar" />
+
+        <libraryjar file="${java.classes.jar}" />
+        <libraryjar file="${jsse.classes.jar}" />
+  		<libraryjar file="${lib}/catalina.jar" />
+  		<libraryjar file="${lib}/log4j.jar" />
+  	  	<libraryjar file="${lib}/commons-digester-1.7.jar" />
+  		<libraryjar file="${lib}/jgroups-all.jar" />
+  	  	<libraryjar file="${lib}/utils-nll.jar" />
+
+  		<keep access="public" implements="org.apache.catalina.LifecycleListener" />
+
+  	    <keepclassmembers extends="java.lang.Enum">
+  	      <method access="public static"
+  	              type="**[]"
+  	              name="values"
+  	              parameters="" />
+  	      <method access="public static"
+  	              type="**"
+  	              name="valueOf"
+  	              parameters="java.lang.String" />
+  	    </keepclassmembers>
+
+  	    <keepclassmembers implements="java.io.Serializable">
+  	      <field  access    ="static final"
+  	              type      ="long"
+  	              name      ="serialVersionUID" />
+  	      <field  access    ="static final"
+  	              type      ="java.io.ObjectStreamField[]"
+  	              name      ="serialPersistentFields" />
+  	      <method access    ="private"
+  	              type      ="void"
+  	              name      ="writeObject"
+  	              parameters="java.io.ObjectOutputStream" />
+  	      <method access    ="private"
+  	              type      ="void"
+  	              name      ="readObject"
+  	              parameters="java.io.ObjectInputStream" />
+  	      <method type      ="java.lang.Object"
+  	              name      ="writeReplace"
+  	              parameters="" />
+  	      <method type      ="java.lang.Object"
+  	              name      ="readResolve"
+  	              parameters="" />
+  	    </keepclassmembers>
+  	</proguard>
+  </target>
+
+</project>
