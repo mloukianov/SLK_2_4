@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="wsdl-generated"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/commons-beanutils-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-2.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-digester-1.7.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="lib/jgroups-all.jar"/>
+	<classpathentry kind="lib" path="lib/log4j.jar"/>
+	<classpathentry kind="lib" path="lib/proguard.jar"/>
+	<classpathentry kind="lib" path="lib/utils-nll.jar"/>
+	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.7-bin.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/Users/maxloukianov/apache-tomcat-6.0.29/lib/catalina.jar"/>
+	<classpathentry kind="lib" path="lib/commons-dbcp-1.4.jar"/>
+	<classpathentry kind="lib" path="lib/dbunit-2.4.8.jar" sourcepath="/Users/maxloukianov/.m2/repository/org/dbunit/dbunit/2.4.8/dbunit-2.4.8-sources.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-log4j12-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-simple-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/jcl-over-slf4j-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/jul-to-slf4j-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-over-slf4j-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-ext-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-jcl-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-jdk14-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-migrator-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-nop-1.5.8.jar"/>
+	<classpathentry kind="lib" path="lib/commons-pool-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib/tomcat-6.0.16-tomcat-juli.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.1.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

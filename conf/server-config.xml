@@ -1,0 +1,39 @@
+<server>
+
+  <bootstrap>
+    <product>Game Application Server</product>
+    <version>SLK_2.5.1</version>
+    <build>543</build>
+    <copyright>Copyright (c) 2008-2011, Nine Line Labs LCC</copyright>
+  </bootstrap>
+
+  <name>uss-enterprise</name>
+
+  <logger>
+    <level>DEBUG</level>
+  </logger>
+
+  <cluster>
+    <name>nll-cluster</name>
+    <master>true</master>
+    <alone>master</alone>
+  </cluster>
+
+  <license>
+    <key>1234567890</key>
+    <key>2345678901</key>
+  </license>
+
+  <port>9111</port>
+  <usessl>false</usessl>
+  <poolsize>400</poolsize>
+
+  <keepalive>
+    <ping>
+      <sec>5</sec>
+      <retries>3</retries>
+    </ping>
+    <so_linger>true</so_linger>
+  </keepalive>
+
+</server>
