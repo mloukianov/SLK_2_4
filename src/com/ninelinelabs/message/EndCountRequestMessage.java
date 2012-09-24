@@ -33,6 +33,8 @@ public class EndCountRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminalid = dds.readUTF();
 			cardno     = dds.readUTF();
 			

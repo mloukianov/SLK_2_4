@@ -36,6 +36,8 @@ public class ParameterPutMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();
 			params = dds.readInt();
 

@@ -34,6 +34,8 @@ public class RollErrorMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();
 			rollid = dds.readUTF();
 			

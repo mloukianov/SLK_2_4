@@ -46,13 +46,10 @@ import org.apache.catalina.ServerFactory;
 import org.apache.catalina.core.StandardServer;
 
 import com.ninelinelabs.authentication.vo.AuthenticationResult;
-import com.ninelinelabs.game.slots.vo.GameStops;
-import com.ninelinelabs.game.slots.vo.LotteryGameResult;
 import com.ninelinelabs.lottery.generator.vo.LongTicketVO;
 import com.ninelinelabs.lottery.generator.vo.bor.BorLongTicketVO;
 import com.ninelinelabs.server.cashless.AccountNotFoundException;
 import com.ninelinelabs.server.cashless.TransactionException;
-import com.ninelinelabs.server.processor.DepositRequestProcessor;
 import com.ninelinelabs.util.database.ConnectionDispenser;
 
 /**
@@ -3335,6 +3332,7 @@ public class RequestProcessor {
 	}
 
 
+	/*
 	public static LotteryGameResult processPlayRequest(String terminalId, String gameId, int bet, int[] lines) {
 
 		Connection conn = null;
@@ -3389,9 +3387,10 @@ public class RequestProcessor {
 		}
 
 		return gameResult;
-	}
+	}*/
 
 
+	/*
 	private static int addWinLogRecord(Connection conn, String terminal, String game, LotteryGameResult gameResult, int tx) throws TransactionException {
 		PreparedStatement ps = null;
 
@@ -3449,7 +3448,7 @@ public class RequestProcessor {
 				// Ignore
 			}
 		}
-	}
+	}*/
 
 	public static String getAccountForTerminal(String terminalId) {
 		return "TERMACCNT." + terminalId;
@@ -3587,6 +3586,7 @@ public class RequestProcessor {
 	}
 
 
+	/*
 	private static LotteryGameResult getLotteryGameResult(String user, int location, String game)
 	    throws SQLException, NoLotteryTicketFoundException, StopsNotFoundException, LotteryLogFailedException, NoTicketFoundException {
 
@@ -3631,7 +3631,7 @@ public class RequestProcessor {
 		}
 
 		return result;
-	}
+	}*/
 
 
 	/**
@@ -3640,6 +3640,7 @@ public class RequestProcessor {
 	 * @param newTicketStatus
 	 * @throws SQLException
 	 */
+	/*
 	private static void changeTicketStatus(int ticket, int status) throws SQLException, NoTicketFoundException {
 
 		Connection conn = ConnectionDispenser.getConnection();
@@ -3654,7 +3655,7 @@ public class RequestProcessor {
 		}
 
 		ps.close();
-	}
+	}*/
 
 
 	/**
@@ -3662,6 +3663,7 @@ public class RequestProcessor {
 	 * @param result
 	 * @throws SQLException
 	 */
+	/*
 	private static void addLotteryLogRecord(LotteryGameResult result) throws SQLException, LotteryLogFailedException {
 
 		// PreparedStatement ps = conn.prepareStatement("INSERT INTO LOTTERY_LOG(RECORDNO, RECORDTS, TICKETNO, AMOUNT, USERID, BET, CELLNO, WIN, OPERDAY, RECORDTYPE, RECEIPTPRINTED, RECEIPTNO, TERMINAL) " +
@@ -3687,9 +3689,9 @@ public class RequestProcessor {
 		}
 
 		ps.close();
-	}
+	}*/
 
-
+/*
 	private static int[] generateStops(String game, int win) throws SQLException, StopsNotFoundException {
 		int[] stops;
 
@@ -3717,7 +3719,7 @@ public class RequestProcessor {
 
 		return stops;
 	}
-
+*/
 
 	/**
 	 * Records the completed count for a terminal. Returns newly assigned count id.

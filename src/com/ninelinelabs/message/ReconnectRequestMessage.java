@@ -32,6 +32,8 @@ public class ReconnectRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			clientsession = dds.readUTF();
 			
 		} catch (IOException e) {

@@ -7,31 +7,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.ninelinelabs.io.DataInputStreamEx;
-import com.ninelinelabs.message.AuthenticateRequestMessage;
-import com.ninelinelabs.message.BonusRequestMessage;
-import com.ninelinelabs.message.BuyTicketRequestMessage;
-import com.ninelinelabs.message.CashoutRequestMessage;
-import com.ninelinelabs.message.ConnectRequestMessage;
-import com.ninelinelabs.message.CountRequestMessage;
-import com.ninelinelabs.message.DealerCardRequestMessage;
-import com.ninelinelabs.message.DepositBnaRequestMessage;
-import com.ninelinelabs.message.DoubleRequestMessage;
-import com.ninelinelabs.message.EndCountRequestMessage;
-import com.ninelinelabs.message.ExitTicketRequestMessage;
-import com.ninelinelabs.message.LogEntryRequestMessage;
-import com.ninelinelabs.message.Message;
-import com.ninelinelabs.message.ParameterGetMessage;
-import com.ninelinelabs.message.ParameterPutMessage;
-import com.ninelinelabs.message.PingRequestMessage;
-import com.ninelinelabs.message.PlayRequestMessage;
-import com.ninelinelabs.message.PrintConfirmMessage;
-import com.ninelinelabs.message.PrintRequestMessage;
-import com.ninelinelabs.message.ReconnectRequestMessage;
-import com.ninelinelabs.message.ReelRequestMessage;
-import com.ninelinelabs.message.RollEndMessage;
-import com.ninelinelabs.message.RollErrorMessage;
-import com.ninelinelabs.message.RollInitMessage;
-import com.ninelinelabs.message.RollTicketRequestMessage;
+
+import com.ninelinelabs.message.*;
 
 public class HPSP20MessageParser implements MessageParser {
 	

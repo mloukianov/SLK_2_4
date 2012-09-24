@@ -34,6 +34,8 @@ public class ParameterGetMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();
 			param = dds.readUTF();
 			

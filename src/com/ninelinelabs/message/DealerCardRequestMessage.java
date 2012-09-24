@@ -30,6 +30,8 @@ public class DealerCardRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 		} catch (IOException e) {
 			
 			logger.log(Level.SEVERE, "can not parse message " + MSG_TYPE, e);

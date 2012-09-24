@@ -33,6 +33,8 @@ public class ConnectRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			card = dds.readUTF();
 			ticket = dds.readUTF();
 			

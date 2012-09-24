@@ -34,6 +34,8 @@ public class CountRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminalid = dds.readUTF();
 			cardNumber = dds.readUTF();
 			countMode = dds.readUTF();

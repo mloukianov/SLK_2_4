@@ -34,6 +34,8 @@ public class LogEntryRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();
 			event = dds.readInt();
 			log = dds.readUTF();

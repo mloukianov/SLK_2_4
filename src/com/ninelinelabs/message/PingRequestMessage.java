@@ -33,6 +33,8 @@ public class PingRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminalid = dds.readUTF();
 			pingTime = dds.readInt();
 			

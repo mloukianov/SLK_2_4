@@ -32,6 +32,8 @@ public class CashoutRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();
 			
 		} catch (IOException e) {

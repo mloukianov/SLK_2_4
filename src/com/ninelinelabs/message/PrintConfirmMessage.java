@@ -35,6 +35,8 @@ public class PrintConfirmMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();
 			ticket = dds.readUTF();
 			win = dds.readInt();

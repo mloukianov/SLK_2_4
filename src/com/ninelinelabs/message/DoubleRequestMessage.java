@@ -36,6 +36,8 @@ public class DoubleRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();
 			game = dds.readUTF();
 			seq = dds.readInt();

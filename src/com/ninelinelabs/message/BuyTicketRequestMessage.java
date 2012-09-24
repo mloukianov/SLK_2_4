@@ -35,6 +35,8 @@ public class BuyTicketRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();		// terminal id
 			game = dds.readUTF();		// game id
 			price = dds.readInt();		// ticket price

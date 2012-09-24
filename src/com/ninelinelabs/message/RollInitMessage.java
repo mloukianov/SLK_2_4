@@ -33,6 +33,8 @@ public class RollInitMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();
 			rollid = dds.readUTF();
 			

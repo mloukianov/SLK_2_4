@@ -59,6 +59,12 @@ import com.ninelinelabs.io.DataOutputStreamEx;
 
 import com.ninelinelabs.lottery.generator.vo.bor.BorLongTicketSpinVO;
 import com.ninelinelabs.lottery.generator.vo.bor.BorLongTicketVO;
+import com.ninelinelabs.message.Message;
+import com.ninelinelabs.message.handler.MessageHandler;
+import com.ninelinelabs.message.handler.MessageHandlerRegistry;
+import com.ninelinelabs.message.parser.HPSP20MessageParser;
+import com.ninelinelabs.message.parser.MessageParser;
+import com.ninelinelabs.message.response.Response;
 import com.ninelinelabs.protocol.hpsp.ProtocolHPSP20;
 import com.ninelinelabs.server.ConnectionSession.State;
 
@@ -107,6 +113,8 @@ public class ConnectionRunnable implements Runnable {
 
 	private final Socket socket;
 	private final SessionTracker tracker;
+	private final MessageParser parser;
+	private final MessageHandlerRegistry handlerRegistry;
 
 	private String sessionId;
 
@@ -169,6 +177,8 @@ public class ConnectionRunnable implements Runnable {
 	public ConnectionRunnable(final Socket socket) {
 		this.socket  = socket;
 		this.tracker = new SessionTracker(this);
+		this.parser = new HPSP20MessageParser();
+		this.handlerRegistry = new MessageHandlerRegistry();
 	}
 
 
@@ -378,9 +388,9 @@ public class ConnectionRunnable implements Runnable {
 
 				if (msglen == FlashUtils.MAGIC_NUMBER) {
 
-					logger.log(Level.FINE, "Received policy file request from Flash player");
 					FlashUtils.sendPolicyFile(ds, dos);
-					return;
+					
+					setState(ConnectionSession.State.DISCONNECTED_STATE);
 
 				} else {
 					
@@ -390,13 +400,13 @@ public class ConnectionRunnable implements Runnable {
 					
 					if (checkCRC(msg)) {
 						
-						DataInputStreamEx dds = new DataInputStreamEx(new ByteArrayInputStream(msg));
-
-						String msgtype = dds.readUTF();
+						Message message = parser.parse(msg);
 						
-						logMessageType(msgtype);
+						logMessageType(message.getMsgtype());
 						
-						processMessage(msgtype, dds, dos);
+						Response response = handlerRegistry.getHandler(message.getMsgtype()).handle(message);
+						
+						sendMessage(response.toByteArray(), dos);
 
 					} else {
 						
@@ -451,7 +461,7 @@ public class ConnectionRunnable implements Runnable {
 			return;
 		}
 
-		if (bonusticket.isBonus()) {
+		if (bonusticket != null && bonusticket.isBonus()) {
 
 			logger.log(Level.INFO, "{0} : Incomplete bonus games found for game {1}", new Object[] {sessionId, game} );
 
@@ -1391,6 +1401,13 @@ public class ConnectionRunnable implements Runnable {
 
 		setState(ConnectionSession.State.LOBBY_STATE);
 	}
+	
+	
+	private void sendMessage(byte[] msg, DataOutputStream dos) throws IOException {
+		
+		byte[] crc = CCITTCRC16.crc16(msg);
+		sendMsg(dos, msg.length, msg, crc);
+	}
 
 
 	private void sendMessage(ByteArrayOutputStream bos, DataOutputStream dos, DataOutputStream ddos) throws IOException {
@@ -1721,23 +1738,6 @@ public class ConnectionRunnable implements Runnable {
 				}
 			}
 
-		} else if (gameclass.equals(ProtocolHPSP20.SHORTTICKET)) {
-
-			logger.log(Level.INFO, sessionId + ": PLAY_REQ message received from " + terminal + "; GAME = " + game + "\n" +
-			                       sessionId + ":    BET = " + bet + "; DENOM = 1; LINES = " + lines.toString());
-
-			LotteryGameResult gameResult = RequestProcessor.processPlayRequest(terminal, game, bet, lines);
-
-			logger.log(Level.INFO, sessionId + ": TICKET #: " + gameResult.getTicket() + "\n" +
-			                       sessionId + ":    WIN = " + gameResult.getWin() + " stored in ESCROW");
-
-			@SuppressWarnings("unused")
-			int win = gameResult.getWin();
-			@SuppressWarnings("unused")
-			int[] stops = gameResult.getStops().getStops();
-
-		} else if (gameclass.equals(ProtocolHPSP20.IGRASOFT)) {
-			// FIXME: provide spin handling for IGRASOFT game class
 		}
 
 		setState(ConnectionSession.State.WIN_STATE);

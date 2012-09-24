@@ -36,6 +36,8 @@ public class BonusRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();
 			game = dds.readUTF();
 			num = dds.readInt();

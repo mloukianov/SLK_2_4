@@ -34,6 +34,8 @@ public class AuthenticateRequestMessage extends Message {
 				assert(true);
 			}
 			
+			this.setMsgtype(type);
+			
 			terminal = dds.readUTF();
 			authType = dds.readUTF();
 			pin = dds.readUTF();
